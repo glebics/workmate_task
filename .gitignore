@@ -1,0 +1,79 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.env
+env/
+venv/
+.Python
+*.sqlite3
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# If you are using SQLite3 database
+*.sqlite3
+
+# If you are using PostgreSQL with Docker, ignore the volumes
+volumes/
+postgres_data/
+
+# Local environment settings
+#.env пускай будут для проверки
+#.env.*
+
+# macOS specific
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+*.log
+*.pid
+*.seed
+*.cover
+*.bak
+*.swp
+*.swo
+.envrc
+.vscode/
+.idea/
+**/.idea/
+*.bak
+.DS_Store
+*.swp
+
+# Virtual environments
+env/
+venv/
+env.bak/
+env.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pytest
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+*.cover
+coverage.xml
+*.spec
+
+# MyPy cache
+.mypy_cache/
+
+# pytest logs
+.cache/
+
+# Static and media directories
+/static/
+media/
+
+# VS Code specific
+.vscode/
