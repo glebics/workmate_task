@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserRegisterSerializer
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class BreedViewSet(viewsets.ReadOnlyModelViewSet):
@@ -17,6 +19,13 @@ class BreedViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Breed.objects.all()
     serializer_class = BreedSerializer
+
+    @swagger_auto_schema(
+        operation_description="Получение списка всех пород",
+        responses={200: BreedSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class KittenViewSet(viewsets.ModelViewSet):
@@ -35,9 +44,36 @@ class KittenViewSet(viewsets.ModelViewSet):
             return KittenCreateUpdateSerializer
         return KittenSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    @swagger_auto_schema(
+        operation_description="Создание нового котенка",
+        request_body=KittenCreateUpdateSerializer,
+        responses={
+            201: openapi.Response('Успешно создано', KittenSerializer),
+            400: "Некорректный запрос"
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_description="Обновление данных о котенке",
+        request_body=KittenCreateUpdateSerializer,
+        responses={
+            200: openapi.Response('Успешно обновлено', KittenSerializer),
+            403: "Доступ запрещен",
+            400: "Некорректный запрос"
+        }
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_description="Получение списка котят по породе",
+        responses={
+            200: openapi.Response('Список котят', KittenSerializer(many=True)),
+            404: "Порода не найдена"
+        }
+    )
     @action(detail=False, methods=['get'], url_path='breed/(?P<breed_name>[^/.]+)')
     def kittens_by_breed(self, request, breed_name=None):
         """
@@ -61,13 +97,29 @@ class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = RatingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    @swagger_auto_schema(
+        operation_description="Создание новой оценки котенка",
+        request_body=RatingSerializer,
+        responses={
+            201: openapi.Response('Оценка успешно добавлена', RatingSerializer),
+            400: "Некорректный запрос"
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 
 class UserRegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @swagger_auto_schema(
+        operation_description="Регистрация нового пользователя",
+        request_body=UserRegisterSerializer,
+        responses={
+            201: openapi.Response('Пользователь успешно создан', UserRegisterSerializer),
+            400: "Некорректный запрос"
+        }
+    )
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
