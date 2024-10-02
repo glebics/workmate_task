@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your_default_secret_key')
 # SECRET_KEY = 'django-insecure-ls&73k5!(f$u)*!calu6c)b4xnoy(_4e*h9y$((=x1#&(9o=(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -84,9 +84,9 @@ WSGI_APPLICATION = 'workmate_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'NAME': os.getenv('POSTGRES_DB', 'kitten_exhibition'),
+        'USER': os.getenv('POSTGRES_USER', 'kitten_exhibition'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'kitten_exhibition'),
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
